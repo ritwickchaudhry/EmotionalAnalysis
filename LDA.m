@@ -42,7 +42,7 @@ for i=1:numLabels
     meanDiff  = means(:,i) - totalMean;
     Sb = Sb + numData(i) * (meanDiff*meanDiff');
 end
-det(Sb)
+% det(Sb)
 
 % Adding the Regulariser Term
 Sw = Sw + epsilon*eye(size(Sw,1));
