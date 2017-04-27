@@ -10,8 +10,8 @@ labels = dataFile.labels;
 totalImages = 322;
 numTest = 20;
 
-figure;
-imshow(reshape(totalData(:,1),[64 64]))
+% figure;
+% imshow(reshape(totalData(:,1),[64 64]))
 
 testImages = totalData(:,totalImages - numTest + 1:totalImages);
 testLabels = labels(totalImages - numTest + 1:totalImages);

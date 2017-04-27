@@ -1,6 +1,7 @@
 function accuracy = LDA(trainingData, trainingLabels, testData, testLabels)
 
 numLabels = 7;
+epsilon = 0;
 [imageVecSize,dataSize] = size(trainingData);
 numData = ones(1,numLabels);
 
@@ -23,6 +24,7 @@ for i=1:numLabels
 %     numData(i)
     meanSubData = classData{i} - repmat(means(:,i),[1 numData(i)]);
     covarianceMatrices(:,:,i) = meanSubData*meanSubData';
+%     covarianceMatrices(:,:,i) = cov(trainingData(:,indices)');
 end
 
 % numData
@@ -33,7 +35,6 @@ totalMean = mean(trainingData,2);
 
 % Within Class Scatter
 Sw = sum(covarianceMatrices,3);
-% size(Sw)
 
 % Scatter Between Classes
 Sb = ones(imageVecSize,imageVecSize);
@@ -41,6 +42,11 @@ for i=1:numLabels
     meanDiff  = means(:,i) - totalMean;
     Sb = Sb + numData(i) * (meanDiff*meanDiff');
 end
+det(Sb)
+
+% Adding the Regulariser Term
+Sw = Sw + epsilon*eye(size(Sw,1));
+% rank(Sw)
 
 [V,D] = eigs(inv(Sw)*Sb);
 Weights = V(:,1:numLabels-1);
