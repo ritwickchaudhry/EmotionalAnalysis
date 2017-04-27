@@ -1,5 +1,4 @@
 function accuracy = LDA(trainingData, trainingLabels, testData, testLabels)
-
 numLabels = 7;
 epsilon = 0;
 [imageVecSize,dataSize] = size(trainingData);
@@ -35,6 +34,7 @@ totalMean = mean(trainingData,2);
 
 % Within Class Scatter
 Sw = sum(covarianceMatrices,3);
+% max(max(Sw))
 
 % Scatter Between Classes
 Sb = ones(imageVecSize,imageVecSize);
@@ -42,17 +42,31 @@ for i=1:numLabels
     meanDiff  = means(:,i) - totalMean;
     Sb = Sb + numData(i) * (meanDiff*meanDiff');
 end
+% save('SbFile','Sb');
 % det(Sb)
-
 % Adding the Regulariser Term
 Sw = Sw + epsilon*eye(size(Sw,1));
-% rank(Sw)
 
-[V,D] = eigs(inv(Sw)*Sb);
-Weights = V(:,1:numLabels-1);
+% Reduce the Rank of Sw
+% [U,S,V] = svd(Sw);
+% sz = size(S,2);
+% for i=1:10
+%     S(sz-(i-1),sz-(i-1)) = 0;
+% end
+% Sw = U*S*V';
 
-% size(means)
-% size(Weights)
+invSw = inv(Sw);
+% save('invSwFile2','invSw');
+
+% Take the Top EigenVectors
+[V,D] = eig(invSw*Sb);
+[B,I] = sort(diag(D),'descend');
+% size(I)
+I = I(1:numLabels-1,1);
+V = V(:,I);
+Weights = V;
+
+% Weights = V(:,1:numLabels-1);
 
 meanProjections = Weights' * means;
 numTest = size(testData,2);

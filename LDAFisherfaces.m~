@@ -7,7 +7,7 @@ dataFile = load('ProcessedDataFile.mat');
 totalData = dataFile.data;
 labels = dataFile.labels;
 
-% unique(labels(1:200))
+un
 
 totalImages = 322;
 numTest = 30;
@@ -25,7 +25,7 @@ trainImages = totalData(:,1:totalImages-numTest);
 trainingData = eigenVecs'*(trainImages -repmat(meanTemplate, [1 size(trainImages,2)]));
 trainingLabels = labels(1,1:totalImages-numTest);
 
-% unique(trainingLabels)
+unique(trainingLabels)
 
 testData = eigenVecs'*(testImages - repmat(meanTemplate,[1 numTest]));
 
