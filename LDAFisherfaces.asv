@@ -2,13 +2,10 @@ clear all;
 % Dummy Data
 % totalData = ones(10,100);
 
-dataFile = load('DataFile.mat');
+dataFile = load('ProcessedDataFile.mat');
 
 totalData = dataFile.data;
-split = randperm(size(totalData,2));
-totalData = totalData(:,split);
 labels = dataFile.labels;
-labels = labels(split);
 
 % unique(labels(1:200))
 
@@ -32,8 +29,7 @@ trainingLabels = labels(1,1:totalImages-numTest);
 
 testData = eigenVecs'*(testImages - repmat(meanTemplate,[1 numTest]));
 
-% labels = LDA(trainingData, trainingLabels, testData);
-% testModel(labels,testLabels)
-
-labels = LDA_HOG_SVM(trainingData, trainingLabels, testData, trainImages, testImages);
+labels = LDA(trainingData, trainingLabels, testData);
+testModel(labels,testLabels)
+labels = LDA_HO_HOG(trainingData, trainingLabels, testData,testImages);
 testModel(labels,testLabels)

@@ -30,5 +30,5 @@ testData = ones(36*49, numTest);
 for i =1:numTest
     testData(:,i) = HoG(reshape(testImages(:,i),[64 64]));
 end
-trainingData(:,1)
-LDA(trainingData,trainingLabels,testData,testLabels);
+labels = LDA(trainingData,trainingLabels,testData);
+testModel(labels , testLabels)

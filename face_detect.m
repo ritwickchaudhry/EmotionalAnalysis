@@ -14,4 +14,4 @@ bboxes = step(faceDetector,I);
 face = I(bboxes(1,2):bboxes(1,2)+bboxes(1,4),bboxes(1,1):bboxes(1,1)+bboxes(1,3));
 face = imresize(face,[64 64]);
 face = face(:);
-
+% face = (face - min(face))/(max(face) - min(face));

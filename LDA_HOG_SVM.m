@@ -1,7 +1,7 @@
-function accuracy = LDA_HOG_SVM(trainingData, trainingLabels, testData, testLabels)
+function labels = LDA_HOG_SVM(trainingDataProjected, trainingLabels, testDataProjected, trainingData, testData)
 numLabels = 7;
 epsilon = 0;
-[imageVecSize,~] = size(trainingData);
+[imageVecSize,~] = size(trainingDataProjected);
 numData = ones(1,numLabels);
 
 % numData = [10,10,20,20,10,20,10];
@@ -14,7 +14,7 @@ classData = cell(1,7);
 for i=1:numLabels
     indices = find(trainingLabels == i);
 %     classData = trainingData(:,cumulativeCount+1:cumulativeCount + numData(i));
-    classData{i} = trainingData(:,indices);
+    classData{i} = trainingDataProjected(:,indices);
     numData(i) = size(classData{i},2);
     means(:,i) = mean(classData{i},2);
 %     cumulativeCount = cumulativeCount + numData(i);
@@ -27,7 +27,7 @@ end
 
 % numData
 
-totalMean = mean(trainingData,2);
+totalMean = mean(trainingDataProjected,2);
 
 % size(covarianceMatrices(:,:,1))
 
@@ -66,19 +66,11 @@ V = V(:,I);
 Weights = V;
 
 % Weights = V(:,1:numLabels-1);
-[hog_trainingData,hog_testData] = HogFeatures(size(trainingData,2));
-size(hog_trainingData)
-D_train =  [trainingData' * Weights ,hog_trainingData];
+[hog_trainingData,hog_testData] = HoGFeatures(trainingData,testData);
+
+D_train =  [trainingDataProjected' * Weights ,hog_trainingData'];
 L_train = trainingLabels;
-D_test = [testData' * Weights , hog_testData];
-L_test = testLabels;
+D_test = [testDataProjected' * Weights , hog_testData'];
 Mdl = fitcecoc(D_train,L_train);
 labels = predict(Mdl,D_test);
 
-c =  0;
-for i = 1:1:size(labels,1)
-    if(labels(i) == L_test(i))
-        c = c+1;
-    end    
-end
-accuracy = (c*1.0/size(labels,1))*100.0

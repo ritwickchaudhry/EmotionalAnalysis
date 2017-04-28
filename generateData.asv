@@ -16,6 +16,7 @@ data = ones(64*64,1000);
 Y = zeros(1,1000);
 count = 0;
 
+A = 
 for i = 3:size(files_emotion)
     % Looking for emotion labels in each person's data
 %     disp(['Extracting from ',files_emotion(i).name]);
