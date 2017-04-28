@@ -1,4 +1,4 @@
-function accuracy = LDA(trainingData, trainingLabels, testData, testLabels)
+function labels = LDA(trainingData, trainingLabels, testData)
 numLabels = 7;
 epsilon = 0;
 [imageVecSize,dataSize] = size(trainingData);
@@ -70,20 +70,14 @@ Weights = V;
 
 meanProjections = Weights' * means;
 numTest = size(testData,2);
-accuracy = 0;
+labels = zeros(size(testData,2),1);
 for j=1:numTest
     testProj = Weights' * testData(:,j);
     minDist = inf;
-    predLabel = 0;
     for i=1:numLabels
         if(norm(testProj - meanProjections(i)) < minDist)
             minDist = norm(testProj - meanProjections(i));
-            predLabel = i;
+            labels(j) = i;
         end
     end
-    
-    if predLabel == testLabels(j)
-        accuracy = accuracy + 1;
-    end
 end
-accuracy = (accuracy*1.0/numTest)*100

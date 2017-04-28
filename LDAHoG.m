@@ -14,7 +14,7 @@ numTrain = totalImages - numTest;
 testImages = totalData(:,totalImages - numTest + 1:totalImages);
 testLabels = labels(totalImages - numTest + 1:totalImages);
 
-trainImages = totalData(:,1:totalImages-numTest);
+trainImages = totalData(:,1:numTrain);
 
 trainingData = ones(36*49, numTrain);
 
@@ -30,5 +30,5 @@ testData = ones(36*49, numTest);
 for i =1:numTest
     testData(:,i) = HoG(reshape(testImages(:,i),[64 64]));
 end
-
+trainingData(:,1)
 LDA(trainingData,trainingLabels,testData,testLabels);

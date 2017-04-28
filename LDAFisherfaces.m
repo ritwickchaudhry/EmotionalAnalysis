@@ -29,4 +29,6 @@ trainingLabels = labels(1,1:totalImages-numTest);
 
 testData = eigenVecs'*(testImages - repmat(meanTemplate,[1 numTest]));
 
-LDA(trainingData, trainingLabels, testData, testLabels);
+labels = LDA(trainingData, trainingLabels, testData);
+testModel(labels,testLabels)
+
